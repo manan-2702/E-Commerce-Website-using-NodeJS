@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/manan-2702/Learning_NodeJS/issues"
   },
-  "homepage": "https://github.com/manan-2702/Learning_NodeJS#readme"
+  "homepage": "https://github.com/manan-2702/Learning_NodeJS#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
 }
