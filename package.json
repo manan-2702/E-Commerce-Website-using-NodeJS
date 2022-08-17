@@ -1,0 +1,19 @@
+{
+  "name": "section_3_23",
+  "version": "1.0.0",
+  "description": "Node.JS initial learning",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manan-2702/Learning_NodeJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manan-2702/Learning_NodeJS/issues"
+  },
+  "homepage": "https://github.com/manan-2702/Learning_NodeJS#readme"
+}
