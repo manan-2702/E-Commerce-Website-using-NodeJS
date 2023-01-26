@@ -78,7 +78,7 @@ class User {
 
   deleteItemFromCart(productId) {
     const updatedCartItems = this.cart.items.filter((item) => {
-      return item.productId !== productId.toString();
+      return item.productId.toString() !== productId.toString();
     });
     const db = getDb();
     return db
