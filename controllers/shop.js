@@ -10,6 +10,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         docTitle: "All Products",
         path: "/products",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -21,10 +22,11 @@ exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
   Product.findById(prodId)
     .then((product) => {
-      res.render("shop/product-detial", {
+      res.render("shop/product-detail", {
         product: product,
         docTitle: product.title,
         path: "/products",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -37,6 +39,7 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         docTitle: "Shop",
         path: "/",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -51,13 +54,16 @@ exports.getCart = (req, res, next) => {
       docTitle: "Your Cart",
       path: "/cart",
       products: cartProducts,
+      isAuthenticated: req.session.isLoggedIn,
     });
   });
 };
+
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
+      console.log(product._doc);
       return req.user.addToCart(product);
     })
     .then((result) => {
@@ -115,6 +121,7 @@ exports.getOrders = (req, res, next) => {
         docTitle: "Your Orders",
         path: "/orders",
         orders: orders,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {

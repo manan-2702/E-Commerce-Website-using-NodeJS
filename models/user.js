@@ -26,6 +26,7 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.addToCart = function (product) {
+  console.log(product);
   if (this.cart === undefined) {
     const updatedCart = {
       items: [{ productId: new ObjectId(product._id), quantity: 1 }],
