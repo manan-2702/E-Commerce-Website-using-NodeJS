@@ -6,24 +6,35 @@ exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     path: "/login",
     docTitle: "Login",
-    isAuthenticated: false,
   });
 };
 
 exports.getSignup = (req, res, next) => {
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render("auth/signup", {
     path: "/signup",
     docTitle: "Signup",
-    isAuthenticated: false,
+    errorMessage: message,
   });
 };
 
 exports.getLogin = (req, res, next) => {
-  // const isLoggedIn = req.get("Cookie").trim().split("=")[1];
+  // const isLoggedIn = req.get("Cookie").trim().split("=")[1];\
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render("auth/login", {
     path: "/login",
     docTitle: "Login",
-    isAuthenticated: false,
+    errorMessage: message,
   });
 };
 
@@ -33,6 +44,7 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
+        req.flash("error", "Invalid email or password");
         return res.redirect("/login");
       }
       bcrypt
@@ -66,6 +78,10 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then((userDoc) => {
       if (userDoc) {
+        req.flash(
+          "error",
+          "E-mail exists already, please pick a different E-mail"
+        );
         return res.redirect("/signup");
       }
       return bcrypt
