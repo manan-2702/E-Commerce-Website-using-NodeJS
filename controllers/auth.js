@@ -1,16 +1,17 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const nodemailer = require("nodemailer");
-const sendgridTransport = require("nodemailer-sendgrid-transport");
+// const sendgridTransport = require("nodemailer-sendgrid-transport");
 
-const transporter = nodemailer.createTransport(
-  sendgridTransport({
-    auth: {
-      api_key:
-        "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",
-    },
-  })
-);
+const transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email",
+  port: 587,
+  auth: {
+    user: "bella7@ethereal.email",
+    pass: "ruE4nH6BKKZcAWMVAQ",
+  },
+});
+
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req.get("Cookie").trim().split("=")[1];
   res.render("auth/login", {
@@ -81,10 +82,11 @@ exports.postLogin = (req, res, next) => {
     });
 };
 
-exports.postSignup = (req, res, next) => {
+exports.postSignup = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  let testAccount = await nodemailer.createTestAccount();
   User.findOne({ email: email })
     .then((userDoc) => {
       if (userDoc) {
@@ -107,8 +109,8 @@ exports.postSignup = (req, res, next) => {
         .then((result) => {
           res.redirect("/login");
           return transporter.sendMail({
+            from: "gtxmaster2702@gmail.com",
             to: email,
-            from: "shop@node-complete.com",
             subject: "Signup Succeded",
             html: "<h1>You successfully signed up!</h1>",
           });
