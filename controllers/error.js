@@ -4,3 +4,10 @@ exports.errorPage = (req, res, next) => {
     path: "/404",
   });
 };
+
+exports.get500 = (req, res, next) => {
+  res.status(500).render("500", {
+    docTitle: "Error Page",
+    path: "/500",
+  });
+};
