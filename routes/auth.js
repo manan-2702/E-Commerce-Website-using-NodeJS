@@ -58,10 +58,24 @@ router.post("/logout", authContorller.postLogout);
 
 router.get("/reset", authContorller.getReset);
 
-router.post("/reset", authContorller.postReset);
+router.post(
+  "/reset",
+  body("email").isEmail().withMessage("Please enter a valid E-mail address"),
+  authContorller.postReset
+);
 
 router.get("/reset/:token", authContorller.getNewPassword);
 
-router.post("/new-password", authContorller.postNewPassword);
+router.post(
+  "/new-password",
+  body(
+    "password",
+    "Please enter the Password with only text and numbers, and with at least 5 characters"
+  )
+    .isLength({ min: 5 })
+    .isAlphanumeric()
+    .trim(),
+  authContorller.postNewPassword
+);
 
 module.exports = router;

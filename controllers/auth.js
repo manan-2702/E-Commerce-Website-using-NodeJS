@@ -4,13 +4,18 @@ const User = require("../models/user");
 const nodemailer = require("nodemailer");
 // const sendgridTransport = require("nodemailer-sendgrid-transport");
 const { validationResult } = require("express-validator/check");
-
+nodemailer.createTestAccount((err, account) => {
+  if (err) {
+    console.error("Failed to create a testing account. " + err.message);
+    return process.exit(1);
+  }
+});
 const transporter = nodemailer.createTransport({
-  host: "smtp-mail.outlook.com",
+  host: "smtp.ethereal.email",
   port: 587,
   auth: {
-    user: "mananrajpara2002@outlook.com",
-    pass: "manan@2702",
+    user: "quinn.feeney86@ethereal.email",
+    pass: "kQkq8WsYHkf5sdTEhu",
   },
 });
 
@@ -189,6 +194,10 @@ exports.getReset = (req, res, next) => {
     path: "/reset",
     docTitle: "Reset Password",
     errorMessage: message,
+    oldInput: {
+      email: "",
+    },
+    validationErrors: [],
   });
 };
 
@@ -199,6 +208,18 @@ exports.postReset = (req, res, next) => {
       return res.redirect("/reset");
     }
     const token = buffer.toString("hex");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).render("auth/reset", {
+        path: "/reset",
+        docTitle: "Reset Password",
+        errorMessage: errors.array()[0].msg,
+        oldInput: {
+          email: req.body.email,
+        },
+        validationErrors: errors.array(),
+      });
+    }
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (!user) {
@@ -248,6 +269,10 @@ exports.getNewPassword = (req, res, next) => {
         errorMessage: message,
         userId: user._id.toString(),
         passwordToken: token,
+        oldInput: {
+          password: "",
+        },
+        validationErrors: [],
       });
     })
     .catch((err) => {
@@ -262,6 +287,20 @@ exports.postNewPassword = (req, res, next) => {
   const userId = req.body.userId;
   const passwordToken = req.body.passwordToken;
   let resetUser;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/new-password", {
+      path: "/new-password",
+      docTitle: "New Password",
+      userId: userId,
+      errorMessage: errors.array()[0].msg,
+      oldInput: {
+        password: newPassword,
+      },
+      validationErrors: errors.array(),
+      passwordToken: passwordToken,
+    });
+  }
   User.findOne({
     resetToken: passwordToken,
     resetTokenExpiration: { $gt: Date.now() },
