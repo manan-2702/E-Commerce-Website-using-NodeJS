@@ -29,8 +29,8 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
-const privateKey = fs.readFileSync("server.key");
-const certificate = fs.readFileSync("server.cert");
+// const privateKey = fs.readFileSync("server.key");
+// const certificate = fs.readFileSync("server.cert");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -66,7 +66,7 @@ const accessLogStream = fs.createWriteStream(
 );
 
 app.use(helmet());
-app.use(compression());
+// app.use(compression());
 app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
